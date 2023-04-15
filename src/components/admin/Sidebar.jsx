@@ -24,7 +24,7 @@ function ItemLink({ children, ...props }) {
 
 function Sidebar() {
   return (
-    <Box width="270px">
+    <Box width="270px" boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px">
       <Box p="20px" textAlign="center">
         Logo
       </Box>

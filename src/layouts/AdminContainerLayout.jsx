@@ -8,9 +8,11 @@ import DashboardPage from '../pages/admin/DashboardPage'
 import ProductPage from '../pages/admin/ProductPage'
 import UserPage from '../pages/admin/UserPage'
 import { AppContext } from '../context/AppProvider'
+import axiosCient from '../utils/axiosCLient'
 
 function AdminContainerLayout() {
   const { isLogin } = useContext(AppContext)
+
 
   if (!isLogin) {
     return <Navigate to={"/admin/login"} />
