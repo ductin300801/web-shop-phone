@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Sidebar from '../components/admin/Sidebar'
 import Topbar from '../components/admin/Topbar'
@@ -7,8 +7,15 @@ import CategoryPage from '../pages/admin/CategoryPage'
 import DashboardPage from '../pages/admin/DashboardPage'
 import ProductPage from '../pages/admin/ProductPage'
 import UserPage from '../pages/admin/UserPage'
+import { AppContext } from '../context/AppProvider'
 
 function AdminContainerLayout() {
+  const { isLogin } = useContext(AppContext)
+
+  if (!isLogin) {
+    return <Navigate to={"/admin/login"} />
+  }
+
   return (
     <Box
       width="100%"
