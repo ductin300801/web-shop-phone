@@ -9,8 +9,8 @@ function ProductTitle() {
   const check =
     location.pathname.includes("add") || location.pathname.includes("update");
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Text>Quản lý sản phẩm</Text>
+    <Box display="flex" justifyContent="space-between" alignItems="center" pr="20px">
+      <Text fontSize="24px">Quản lý sản phẩm</Text>
       <Button
         as={Link}
         to={check ? "/admin/product" : "/admin/product/add"}

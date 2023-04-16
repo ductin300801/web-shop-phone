@@ -45,7 +45,7 @@ function ProductTable() {
   };
 
   return (
-    <TableContainer width="100%">
+    <TableContainer>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -53,6 +53,8 @@ function ProductTable() {
             <Th>Ảnh</Th>
             <Th>Tên sản phẩm</Th>
             <Th>Tên danh mục</Th>
+            <Th>Giá</Th>
+            <Th>Giá khuyến mãi</Th>
             <Th>Thời gian</Th>
             <Th>Tạo bởi</Th>
             <Th>Thao tác</Th>
@@ -66,6 +68,8 @@ function ProductTable() {
                 <Td>{<img width="100px" src={`http://localhost:8081/image/${product.image}`} />}</Td>
                 <Td>{product.name}</Td>
                 <Td>{product.category.name}</Td>
+                <Td>{product.price}</Td>
+                <Td>{product.priceSale}</Td>
                 <Td>{product.updatedAt}</Td>
                 <Td>{product.user.username}</Td>
                 <Td

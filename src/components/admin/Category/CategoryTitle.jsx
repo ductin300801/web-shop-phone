@@ -8,8 +8,8 @@ function CategoryTitle() {
   const check =
     location.pathname.includes("add") || location.pathname.includes("update");
   return (
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Text>Quản lý danh mục</Text>
+    <Box display="flex" justifyContent="space-between" alignItems="center" pr="20px">
+      <Text fontSize="24px">Quản lý danh mục</Text>
       <Button
         as={Link}
         to={check ? "/admin/category" : "/admin/category/add"}

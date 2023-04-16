@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { createContext, useState } from "react";
+import axiosCient from "../utils/axiosCLient";
 
 
 
@@ -16,6 +17,10 @@ const AppProvider = ({ children }) => {
     const [userLogin, setUserLogin] = useState(() => {
         return localStorage.getItem("userLogin") ? JSON.parse(localStorage.getItem("userLogin")) : null
     })
+
+    if(isLogin){
+        axiosCient.defaults.headers.common["Authorization"] = "Bearer " + sessionStorage.getItem("accessToken")
+    }
 
     return (
         <AppContext.Provider value={{ isLogin, setIsLogin, userLogin, setUserLogin }}>

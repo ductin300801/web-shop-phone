@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import AppProvider from "./context/AppProvider";
 import { FavorProvider } from "./context/FavorProvider";
+import { CartProvider } from "./context/CartProvider";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -13,7 +14,9 @@ ReactDOM.render(
       <ChakraProvider>
         <AppProvider>
           <FavorProvider>
-            <App />
+            <CartProvider>
+              <App />
+            </CartProvider>
           </FavorProvider>
         </AppProvider>
       </ChakraProvider>

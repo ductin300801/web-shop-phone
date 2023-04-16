@@ -69,11 +69,13 @@ const AdminLoginPage = () => {
           "userLogin",
           JSON.stringify({
             username: response.username,
+            fullname: response.fullname,
           })
         );
         setIsLogin(true);
         setUserLogin({
           username: response.username,
+          fullname: response.fullname,
         });
         navigate("/admin/dashboard");
       }

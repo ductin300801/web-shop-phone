@@ -1,51 +1,24 @@
-import React from "react";
-import { Box, Image } from "@chakra-ui/react";
+import React, { Fragment } from "react";
+import { Box, Button, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import styled from "styled-components";
 import { useFavor } from "../../../context/FavorProvider";
 import { useAuth } from "../../../context/AppProvider";
-
-const Button = styled.button`
-  border-radius: 10px;
-  font-size: 0.9rem;
-  padding: 0.6rem 0.1rem;
-  width: 48%;
-`;
+import { BsFillCartPlusFill } from "react-icons/bs";
+import { useCart } from "../../../context/CartProvider";
+import { toast } from "react-toastify";
 
 function ProductCard({ item }) {
-//   const { addToBasket, items } = useBasket();
-  const { addToFavor, favors } = useFavor();
-//   const { loggedIn, goToLink } = useAuth();
-
-//   const findBasketItem = items.find(
-//     (basket_item) => basket_item.id === item.id
-//   );
-
-  const findFavorItem = favors.find((favor_item) => favor_item.id === item.id);
-  const myHearthSvg = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="white"
-      viewBox="0 0 24 24"
-    >
-      <path d="M12 4.248c-3.148-5.402-12-3.825-12 2.944 0 4.661 5.571 9.427 12 15.808 6.43-6.381 12-11.147 12-15.808 0-6.792-8.875-8.306-12-2.944z" />
-    </svg>
-  );
-  const myCartSvg = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="white"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-    >
-      <path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm6.304-15l-3.431 12h-2.102l2.542-9h-16.813l4.615 11h13.239l3.474-12h1.929l.743-2h-4.196z" />
-    </svg>
-  );
-
+  const { onAdd } = useCart();
+  const handleAddCart = (product) => {
+    try {
+      onAdd(product);
+      toast.success("Đã thêm vào giỏ hàng");
+    } catch (error) {
+      toast.error("Đã xảy ra lỗi");
+    }
+  };
   return (
     <Box
       className={styles.box}
@@ -62,6 +35,14 @@ function ProductCard({ item }) {
           loading="lazy"
         />
         <Box p="6">
+          <Text
+            fontSize="15px"
+            fontWeight="bold"
+            color="#bbb"
+            textAlign="right"
+          >
+            {item.category.name}
+          </Text>
           <Box
             fontSize="medium"
             mt="1"
@@ -71,28 +52,30 @@ function ProductCard({ item }) {
           >
             {item.name}
           </Box>
-          <Box className={styles.pricebox}>{item.price} vnd</Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            flexDirection="row"
+            alignItems="center"
+          >
+            {item.priceSale ? (
+              <Fragment>
+                <Box fontSize="20px">{item.priceSale}vnd</Box>
+                <Box textDecoration="line-through">{item.price}vnd</Box>
+              </Fragment>
+            ) : (
+              <Box>{item.price}vnd</Box>
+            )}
+          </Box>
         </Box>
       </Link>
       <Box className={styles.buttonContainer}>
         <Button
-          style={{ backgroundColor: findFavorItem ? "purple" : "red" }}
-          onClick={true ? () => addToFavor(item, findFavorItem) : "/login"}
+          colorScheme="purple"
+          isFullWidth
+          onClick={() => handleAddCart(item)}
         >
-          {myHearthSvg}
-        </Button>
-        <Button
-          style={{
-            backgroundColor: true ? "purple" : "orange",
-            color: "white",
-            fontSize: "0.9rem",
-            fontWeight: "bolder",
-          }}
-        //   onClick={
-        //     loggedIn ? () => addToBasket(item, findBasketItem) : goToLink
-        //   }
-        >
-          {true ? myCartSvg : "Add to Cart"}
+          <BsFillCartPlusFill fontSize="24px" />
         </Button>
       </Box>
     </Box>

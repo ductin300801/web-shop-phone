@@ -19,33 +19,16 @@ axiosCient.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      if (
-        error.response.status === 401 &&
-        error.response.data.message !== "invalid username or password"
-      ) {
-        localStorage.removeItem("userLogin");
-        sessionStorage.removeItem("accessToken")
-        location.href = "/admin/login";
+      const { data } = error.response;
+      if (data.message === "Unauthorized" && error.response.status === 401) {
+        sessionStorage.getItem("accessToken") &&
+          sessionStorage.removeItem("accessToken");
+        localStorage.getItem("userLogin") &&
+          localStorage.removeItem("userLogin");
+        window.location.reload();
       }
-      // Nếu có response từ server trả về
-      return Promise.reject({
-        message: error.message,
-        code: error.response.status,
-        data: error.response.data,
-      });
-    } else if (error.request) {
-      // Nếu request được gửi nhưng không nhận được response
-      return Promise.reject({
-        message: error.message,
-        code: "REQUEST_ERROR",
-      });
-    } else {
-      // Lỗi không thể được xác định
-      return Promise.reject({
-        message: error.message,
-        code: "UNKNOWN_ERROR",
-      });
     }
+    Promise.reject(error);
   }
 );
 

@@ -108,7 +108,7 @@ function Header() {
             </Link>
           </>
         )}
-        <Link to="/favor">
+        <Link to="/cart">
           <Button colorScheme="purple" variant="outline">
             <BsFillCartFill />
           </Button>

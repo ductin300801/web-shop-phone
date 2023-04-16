@@ -3,6 +3,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Image,
   Input,
   Select,
   Textarea,
@@ -22,22 +23,40 @@ function ProductForm() {
   const [categories, setCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState();
   const [price, setPrice] = useState(0);
+  const [priceSale, setPriceSale] = useState(0);
   const [file, setFile] = useState();
+  const [previewImage, setPreviewImage] = useState("");
+
+  useEffect(() => {
+    if (!state) return;
+    setProductValue(state.name);
+    setDiscription(state.description);
+    setPrice(state.price);
+    setPriceSale(state.priceSale);
+    setCategorySelected(state.category.id);
+    setPreviewImage(`http://localhost:8081/image/${state.image}`);
+  }, [location]);
 
   useEffect(() => {
     axiosCient
       .get("/category")
       .then((response) => {
         setCategories(response);
-        setCategorySelected(response[0].id);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
+  useEffect(() => {
+    return () => {
+      previewImage && URL.revokeObjectURL(previewImage);
+    };
+  }, [previewImage]);
+
   const handleChangeFile = (e) => {
     setFile(e.target.files[0]);
+    setPreviewImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleSubmit = async (e) => {
@@ -45,15 +64,20 @@ function ProductForm() {
     if (!categorySelected) return;
     if (!discription) return;
     if (!productValue) return;
-    if (!price) return;
+    if (price === 0 || !price) return;
     if (state) {
+    console.log("alo1");
+
       try {
         const formData = new FormData();
         formData.append("name", productValue);
         formData.append("description", discription);
         formData.append("catId", categorySelected);
+        formData.append("priceSale", priceSale);
         formData.append("price", price);
-        formData.append("imageFile", file);
+        if (file) {
+          formData.append("imageFile", file);
+        }
         await axiosCient.put("/product/" + state.id, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -64,13 +88,16 @@ function ProductForm() {
         toast.error("Đã xảy ra lỗi");
       }
     } else {
+    console.log("alo2");
+
       try {
         if (!file) return;
         const formData = new FormData();
         formData.append("name", productValue);
         formData.append("description", discription);
-        formData.append("price", price);
         formData.append("catId", categorySelected);
+        formData.append("price", price);
+        formData.append("priceSale", priceSale);
         formData.append("imageFile", file);
         await axiosCient.post("/product", formData, {
           headers: {
@@ -127,6 +154,15 @@ function ProductForm() {
           />
         </FormControl>
         <FormControl mt="10px">
+          <FormLabel>Giá khuyến mãi</FormLabel>
+          <Input
+            type="number"
+            value={priceSale}
+            onChange={(e) => setPriceSale(e.target.value)}
+            placeholder="Nhập giá khuyến mãi..."
+          />
+        </FormControl>
+        <FormControl mt="10px">
           <FormLabel>Chi tiết</FormLabel>
           <Textarea
             value={discription}
@@ -135,10 +171,13 @@ function ProductForm() {
             rows={3}
           />
         </FormControl>
-        <FormControl mt="10px">
-          <FormLabel>Ảnh</FormLabel>
-          <Input type="file" onChange={handleChangeFile} />
-        </FormControl>
+        <Box mt="10px" display="flex">
+          <FormControl width="300px" marginRight="20px">
+            <FormLabel>Ảnh</FormLabel>
+            <Input type="file" onChange={handleChangeFile} />
+          </FormControl>
+          <Image src={previewImage} width="300px" />
+        </Box>
         <Button type="submit" isFullWidth mt="10px" colorScheme="blue">
           Thêm
         </Button>
